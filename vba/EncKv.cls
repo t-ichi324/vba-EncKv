@@ -28,7 +28,7 @@ End Function
 
 Public Sub Clear(): Set mKeys = New Collection: Set mVals = New Collection:  End Sub
 Public Function Count() As Integer: Count = mKeys.Count: End Function
-Public Function IsExists(ByVal pKey As String) As Boolean: IsExists = (mIndexOf(pKey) <> -1): End Function
+Public Function IsExists(ByVal pKey As String) As Boolean: IsExists = (mIndexOf(pKey) <> 0): End Function
 
 Public Function GetKeys() As Collection
     Dim cp As New Collection
@@ -42,7 +42,7 @@ End Function
 Public Function Remove(ByVal pKey As String) As Boolean
     Remove = False
     Dim i As Integer: i = mIndexOf(pKey)
-    If i < 0 Then Exit Function
+    If i = 0 Then Exit Function
     Call mKeys.Remove(i)
     Call mVals.Remove(i)
     Remove = True
@@ -65,8 +65,8 @@ End Sub
 Public Function GetValue(ByVal pKey As String, Optional defaultVal As String = "") As String
 On Error GoTo ex:
     Dim i As Integer: i = mIndexOf(pKey)
-    If i >= 0 Then
-        GetValue = mVals(i + 1)
+    If i <> 0 Then
+        GetValue = mVals(i)
         Exit Function
     End If
 ex:
@@ -106,11 +106,12 @@ ex:
 End Function
 
 
+'0:not found / 1~ found
 Private Function mIndexOf(ByVal pKey As String) As Integer
 On Error GoTo ex:
-    mIndexOf = -1
+    mIndexOf = 0
     If pKey = "" Then: Exit Function
-    Dim ix As Integer: ix = -1
+    Dim ix As Integer: ix = 0
     Dim v As Variant
     For Each v In mKeys
         ix = ix + 1
